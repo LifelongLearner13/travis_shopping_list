@@ -50,11 +50,9 @@ describe('Shopping List', function() {
     });
 
     it('should list item with given ID on GET', function(done) {
-      console.log('items', firstItemId);
       chai.request(app)
         .get('/items/' + firstItemId)
         .end(function(err, response) {
-          console.log('Should list item with given ID on GET: ', response.body);
           should.equal(err, null);
           response.should.have.status(200);
           response.should.be.json;
@@ -80,9 +78,9 @@ describe('Shopping List', function() {
                 response.should.be.json;
                 response.body.should.be.a('object');
                 response.body.should.have.property('name');
-                response.body.should.have.property('id');
+                response.body.should.have.property('_id');
                 response.body.name.should.be.a('string');
-                response.body.id.should.be.a('number');
+                response.body['_id'].should.be.a('string');
                 response.body.name.should.equal('Kale');
                 // storage.items.should.be.a('array');
                 // storage.items.should.have.length(5);
@@ -96,34 +94,9 @@ describe('Shopping List', function() {
             });
     });
 
-    it('should add a user including items on POST', function(done) {
-        chai.request(app)
-            .post('/users')
-            .send(
-                {"username": "Chris", "items": [{"name": "Eggs", "id": 9}]}
-            )
-            .end(function(err, response) {
-                should.equal(err, null);
-                response.should.have.status(201);
-                response.should.be.json;
-                response.body.should.be.a('object');
-                response.body.should.have.property('username');
-                response.body.should.have.property('items');
-                response.body.username.should.be.a('string');
-                response.body.items.should.be.a('array');
-                response.body.username.should.equal('Chris');
-                response.body.items[0].name.should.equal('Eggs');
-                response.body.items[0].id.should.equal(9);
-                // storage.items.should.have.length(6);
-                // storage.items[5].name.should.equal('Eggs');
-                // storage.items[5].id.should.equal(9);
-                done();
-            });
-    });
-
     it('should edit an item on PUT', function(done) {
         chai.request(app)
-            .put('/items/1')
+            .put('/items/' + firstItemId)
             .send({
                 'name': 'Kale'
             })
@@ -133,9 +106,9 @@ describe('Shopping List', function() {
                 response.should.be.json;
                 response.body.should.be.a('object');
                 response.body.should.have.property('name');
-                response.body.should.have.property('id');
+                response.body.should.have.property('_id');
                 response.body.name.should.be.a('string');
-                response.body.id.should.be.a('number');
+                response.body['_id'].should.be.a('string');
                 response.body.name.should.equal('Kale');
                 // storage.items.should.be.a('array');
                 // storage.items.should.have.length(6);
@@ -178,72 +151,21 @@ describe('Shopping List', function() {
             });
     });
 
-    it('should change username on PUT', function(done) {
-        chai.request(app)
-            .put('/users/Joe')
-            .send({
-                'username': 'Martin'
-            })
-            .end(function(err, response) {
-                should.equal(err, null);
-                response.should.have.status(200);
-                response.should.be.json;
-                response.body.should.be.a('object');
-                response.body.should.have.property('username');
-                response.body.should.have.property('items');
-                response.body.username.should.be.a('string');
-                response.body.items.should.be.a('array');
-                response.body.username.should.equal('Martin');
-                // storage.users.should.be.a('array');
-                // storage.users.should.have.length(2);
-                // storage.users[0].should.be.a('object');
-                // storage.users[0].should.have.property('username');
-                // storage.users[0].should.have.property('items');
-                // storage.users[0].username.should.be.a('string');
-                // storage.users[0].items.should.be.a('array');
-                // storage.users[0].username.should.equal('Martin');
-                // storage.users[0].items[0].name.should.equal('Plantain');
-                done();
-            });
-
-    });
-
-
     it('should delete an item on DELETE', function(done) {
         chai.request(app)
-            .delete('/items/1')
+            .delete('/items/' + firstItemId)
             .end(function(err, response) {
                 should.equal(err, null);
                 response.should.have.status(200);
                 response.should.be.json;
                 response.body.should.be.a('object');
                 response.body.should.have.property('name');
-                response.body.should.have.property('id');
+                response.body.should.have.property('_id');
                 response.body.name.should.be.a('string');
-                response.body.id.should.be.a('number');
+                response.body['_id'].should.be.a('string');
                 response.body.name.should.equal('Kale');
                 // storage.items.should.have.length(6);
                 // storage.items[1].id.should.equal(2);
-                done();
-            });
-    });
-
-    it('should delete a user on DELETE', function(done) {
-        chai.request(app)
-            .delete('/users/Martin')
-            .end(function(err, response) {
-                should.equal(err, null);
-                response.should.have.status(200);
-                response.should.be.json;
-                response.body.should.be.a('object');
-                response.body.should.have.property('username');
-                response.body.should.have.property('items');
-                response.body.username.should.be.a('string');
-                response.body.items.should.be.a('array');
-                response.body.username.should.equal('Martin');
-                // storage.items.should.have.length(5);
-                // storage.users.should.have.length(1);
-                // storage.users[0].username.should.equal('Chris');
                 done();
             });
     });
