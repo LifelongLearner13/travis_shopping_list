@@ -11,6 +11,15 @@ router.get('/items', function(req, res) {
     });
 });
 
+router.get('/items/:id', function(req, res) {
+    Item.locate(req.params.id, function(err, item) {
+        if (err) {
+            return res.status(400).json(err);
+        }
+        res.status(200).json(item);
+    });
+});
+
 router.post('/items', function(req, res) {
     Item.save(req.body.name, function(err, item) {
         if (err) {

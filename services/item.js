@@ -30,12 +30,22 @@ exports.del = function(id, callback) {
   });
 };
 
-exports.update = function(id, name, callback) {
-  Item.findOneAndUpdate({_id: id}, {name: name}, function(err, item) {
+exports.update = function(id, newName, callback) {
+  Item.findOneAndUpdate({'_id': id}, {name: newName}, {new: true}, function(err, item) {
     if(err) {
       callback(err);
       return;
     }
     callback(null, item);
+  });
+};
+
+exports.locate = function(id, callback) {
+  Item.find({'_id': id}, function(err, items) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, items);
   });
 };
